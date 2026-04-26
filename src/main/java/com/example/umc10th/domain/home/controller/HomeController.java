@@ -1,0 +1,32 @@
+package com.example.umc10th.domain.home.controller;
+
+import com.example.umc10th.domain.home.dto.HomeResDTO;
+import com.example.umc10th.domain.home.exception.code.HomeSuccessCode;
+import com.example.umc10th.domain.home.service.HomeService;
+import com.example.umc10th.global.apiPayload.ApiResponse;
+import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api")
+@RequiredArgsConstructor
+public class HomeController {
+
+    // private final HomeService homeService;
+
+    // 홈 화면 조회
+    @GetMapping("/v1/home")
+    public ApiResponse<HomeResDTO.HomeViewDTO> getHomeView(
+            @RequestParam Long regionId,
+            @RequestParam(defaultValue = "0") Integer page
+    ) {
+        BaseSuccessCode code = HomeSuccessCode.OK;
+        return ApiResponse.onSuccess(
+                code,
+                null); // homeService
+    }
+}
