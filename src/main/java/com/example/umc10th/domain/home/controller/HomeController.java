@@ -12,21 +12,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class HomeController {
 
-    // private final HomeService homeService;
+    private final HomeService homeService;
 
     // 홈 화면 조회
-    @GetMapping("/v1/home")
+    @GetMapping("/home")
     public ApiResponse<HomeResDTO.HomeViewDTO> getHomeView(
             @RequestParam Long regionId,
-            @RequestParam(defaultValue = "0") Integer page
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "3") Integer size
     ) {
+        Long memberId = 1L; // TODO: 인증 연동
+
+        HomeResDTO.HomeViewDTO resultDTO = homeService.getHomeView(memberId, regionId, page, size);
+
         BaseSuccessCode code = HomeSuccessCode.OK;
         return ApiResponse.onSuccess(
                 code,
-                null); // homeService
+                resultDTO);
     }
 }
