@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemberController {
 
-    // private final MemberService memberService;
+    private final MemberService memberService;
 
     // 회원가입
     @PostMapping("/auth/signup")
@@ -29,11 +29,15 @@ public class MemberController {
 
     // 마이페이지 조회
     @GetMapping("/members/me")
-    public ApiResponse<MemberResDTO.JoinResultDTO> getMyPage(
+    public ApiResponse<MemberResDTO.MyPageResultDTO> getMyPage(
     ) {
+        Long memberId = 1L; // TODO: 인증 연동
+
+        MemberResDTO.MyPageResultDTO resultDTO = memberService.getMyPage(memberId);
+
         BaseSuccessCode code = MemberSuccessCode.MYPAGE_OK;
         return ApiResponse.onSuccess(
                 code,
-                null); // memberService
+                resultDTO);
     }
 }
