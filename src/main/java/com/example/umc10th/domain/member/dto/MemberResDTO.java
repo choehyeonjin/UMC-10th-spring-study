@@ -12,4 +12,15 @@ public class MemberResDTO {
             Long memberId,
             LocalDateTime createdAt
     ) {}
+
+    // 마이페이지 조회
+    @Builder
+    public record MyPageResultDTO(
+            String profileImageUrl,
+            String nickname,
+            String email,
+            String phoneNumber,
+            Boolean isPhoneVerified,
+            Integer point
+    ) {}
 }
