@@ -49,7 +49,7 @@ public class MissionServiceImpl implements MissionService {
 
         // 미션 목록 페이징 조회
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<MemberMission> missionPage = memberMissionRepository.findAllByMemberAndStatus(member, status, pageRequest);
+        Page<MemberMission> missionPage = memberMissionRepository.findMyMissions(member, status, pageRequest);
 
         // 각 미션별 리뷰 작성 여부 확인
         List<Boolean> reviewWrittenList = missionPage.getContent().stream()
