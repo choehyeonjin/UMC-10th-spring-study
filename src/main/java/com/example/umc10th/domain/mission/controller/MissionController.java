@@ -11,27 +11,32 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class MissionController {
 
-    // private final MissionService missionService;
+    private final MissionService missionService;
 
     // 미션 목록 조회
-    @GetMapping("/v1/missions")
+    @GetMapping("/missions")
     public ApiResponse<MissionResDTO.MissionListDTO> getMissions(
             @RequestParam String status,
-            @RequestParam(defaultValue = "0") Integer page
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "3") Integer size
     ) {
+        Long memberId = 1L; // TODO: 인증 연동
+
+        MissionResDTO.MissionListDTO resultDTO = missionService.getMyMissions(memberId, status, page, size);
+
         BaseSuccessCode code = MissionSuccessCode.OK;
         return ApiResponse.onSuccess(
                 code,
-                null // missionService
+                resultDTO
         );
     }
 
     // 미션 도전
-    @PostMapping("/v1/missions/{missionId}/challenge")
+    @PostMapping("/missions/{missionId}/challenge")
     public ApiResponse<MissionResDTO.MissionChallengeDTO> challengeMission(
             @PathVariable Long missionId
     ) {
@@ -43,7 +48,7 @@ public class MissionController {
     }
 
     // 미션 성공
-    @PatchMapping("/v1/member-missions/{memberMissionId}/success")
+    @PatchMapping("/member-missions/{memberMissionId}/success")
     public ApiResponse<MissionResDTO.MissionSuccessDTO> completeMission(
             @PathVariable Long memberMissionId
     ) {
