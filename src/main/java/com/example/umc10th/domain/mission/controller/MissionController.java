@@ -7,6 +7,7 @@ import com.example.umc10th.domain.mission.exception.code.MissionSuccessCode;
 import com.example.umc10th.domain.mission.service.MissionService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
+import com.example.umc10th.global.dto.PageResDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,18 +20,17 @@ public class MissionController {
 
     // 미션 목록 조회
     @GetMapping("/missions")
-    public ApiResponse<MissionResDTO.MissionListDTO> getMissions(
+    public ApiResponse<PageResDTO<MissionResDTO.MissionDetailDTO>> getMissions(
             @RequestParam String status,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "3") Integer size
     ) {
         Long memberId = 1L; // TODO: 인증 연동
 
-        MissionResDTO.MissionListDTO resultDTO = missionService.getMyMissions(memberId, status, page, size);
+        PageResDTO<MissionResDTO.MissionDetailDTO> resultDTO = missionService.getMyMissions(memberId, status, page, size);
 
-        BaseSuccessCode code = MissionSuccessCode.OK;
         return ApiResponse.onSuccess(
-                code,
+                MissionSuccessCode.OK,
                 resultDTO
         );
     }

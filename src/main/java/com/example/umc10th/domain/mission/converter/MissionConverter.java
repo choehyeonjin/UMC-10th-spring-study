@@ -2,6 +2,7 @@ package com.example.umc10th.domain.mission.converter;
 
 import com.example.umc10th.domain.mission.dto.MissionResDTO;
 import com.example.umc10th.domain.mission.entity.mapping.MemberMission;
+import com.example.umc10th.global.dto.PageResDTO;
 import com.example.umc10th.global.dto.PageResDTO.PageInfoDTO;
 import org.springframework.data.domain.Page;
 
@@ -11,7 +12,8 @@ import java.util.stream.IntStream;
 
 public class MissionConverter {
 
-    public static MissionResDTO.MissionListDTO toMissionListDTO(Page<MemberMission> missionPage, List<Boolean> reviewWrittenList) {
+    public static PageResDTO<MissionResDTO.MissionDetailDTO> toMissionPageResponse(
+            Page<MemberMission> missionPage, List<Boolean> reviewWrittenList) {
 
         List<MissionResDTO.MissionDetailDTO> missionDetailList = IntStream.range(0, missionPage.getContent().size())
                 .mapToObj(i -> {
@@ -21,8 +23,8 @@ public class MissionConverter {
                 })
                 .collect(Collectors.toList());
 
-        return MissionResDTO.MissionListDTO.builder()
-                .missions(missionDetailList)
+        return PageResDTO.<MissionResDTO.MissionDetailDTO>builder()
+                .content(missionDetailList)
                 .pageInfo(PageInfoDTO.builder()
                         .page(missionPage.getNumber())
                         .size(missionPage.getSize())

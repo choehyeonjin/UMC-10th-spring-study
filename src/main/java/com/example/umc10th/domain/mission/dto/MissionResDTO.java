@@ -9,11 +9,6 @@ import java.util.List;
 public class MissionResDTO {
 
     // 미션 목록 조회
-    @Builder
-    public record MissionListDTO(
-            PageInfoDTO pageInfo,
-            List<MissionDetailDTO> missions
-    ) {}
 
     @Builder
     public record MissionDetailDTO(
