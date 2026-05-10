@@ -24,7 +24,7 @@ public class MissionConverter {
                 .collect(Collectors.toList());
 
         return PageResDTO.<MissionResDTO.MissionDetailDTO>builder()
-                .content(missionDetailList)
+                .data(missionDetailList)
                 .pageInfo(PageInfoDTO.builder()
                         .page(missionPage.getNumber())
                         .size(missionPage.getSize())

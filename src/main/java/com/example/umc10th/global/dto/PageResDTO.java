@@ -5,7 +5,7 @@ import java.util.List;
 
 @Builder
 public record PageResDTO<T>(
-        List<T> content,
+        List<T> data,
         PageInfoDTO pageInfo
 ) {
     @Builder
