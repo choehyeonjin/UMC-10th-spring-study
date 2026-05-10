@@ -1,15 +1,19 @@
 package com.example.umc10th.global.dto;
 
 import lombok.Builder;
+import java.util.List;
 
-public class PageResDTO {
-
+@Builder
+public record PageResDTO<T>(
+        List<T> content,
+        PageInfoDTO pageInfo
+) {
     @Builder
     public record PageInfoDTO(
             Integer page,
             Integer size,
             Long totalElements,
             Integer totalPages,
-            Boolean hasNext)
-    {}
+            Boolean hasNext
+    ) {}
 }
