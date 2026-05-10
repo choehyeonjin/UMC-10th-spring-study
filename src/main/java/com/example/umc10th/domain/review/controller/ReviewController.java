@@ -8,6 +8,7 @@ import com.example.umc10th.domain.review.exception.code.ReviewSuccessCode;
 import com.example.umc10th.domain.review.service.ReviewService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class ReviewController {
     // 리뷰 작성
     @PostMapping("/reviews")
     public ApiResponse<ReviewResDTO.CreateReviewResultDTO> createReview(
-            @RequestBody ReviewReqDTO.CreateReviewDTO request
+            @RequestBody @Valid ReviewReqDTO.CreateReviewDTO request
     ) {
         Long memberId = 1L; // TODO: 인증 연동
 
