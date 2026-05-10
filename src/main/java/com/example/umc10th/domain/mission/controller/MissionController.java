@@ -19,14 +19,14 @@ public class MissionController {
     private final MissionService missionService;
 
     // 미션 목록 조회
-    @GetMapping("/missions")
+    @PostMapping("/missions")
     public ApiResponse<PageResDTO<MissionResDTO.MissionDetailDTO>> getMissions(
+            @RequestBody MissionReqDTO.GetMyMissionsReqDTO request,
             @RequestParam String status,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "3") Integer size
     ) {
-        Long memberId = 1L; // TODO: 인증 연동
-
+        Long memberId = request.getMemberId();
         PageResDTO<MissionResDTO.MissionDetailDTO> resultDTO = missionService.getMyMissions(memberId, status, page, size);
 
         return ApiResponse.onSuccess(
