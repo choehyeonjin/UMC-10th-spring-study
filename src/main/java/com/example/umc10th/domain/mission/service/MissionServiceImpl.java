@@ -10,6 +10,7 @@ import com.example.umc10th.domain.mission.exception.MissionException;
 import com.example.umc10th.domain.mission.exception.code.MissionErrorCode;
 import com.example.umc10th.domain.mission.repository.MemberMissionRepository;
 import com.example.umc10th.domain.review.repository.ReviewRepository;
+import com.example.umc10th.global.dto.PageResDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,7 +30,7 @@ public class MissionServiceImpl implements MissionService {
     private final ReviewRepository reviewRepository;
 
     @Override
-    public MissionResDTO.MissionListDTO getMyMissions(Long memberId, String statusStr, Integer page, Integer size) {
+    public PageResDTO<MissionResDTO.MissionDetailDTO> getMyMissions(Long memberId, String statusStr, Integer page, Integer size){
 
         // 회원 검증
         Member member = memberRepository.findById(memberId)
@@ -62,6 +63,6 @@ public class MissionServiceImpl implements MissionService {
                 })
                 .collect(Collectors.toList());
 
-        return MissionConverter.toMissionListDTO(missionPage, reviewWrittenList);
+        return MissionConverter.toMissionPageResponse(missionPage, reviewWrittenList);
     }
 }

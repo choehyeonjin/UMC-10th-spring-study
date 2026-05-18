@@ -6,7 +6,9 @@ import com.example.umc10th.domain.member.entity.Member;
 import com.example.umc10th.domain.member.repository.MemberRepository;
 import com.example.umc10th.domain.mission.entity.Store;
 import com.example.umc10th.domain.mission.repository.StoreRepository;
+import com.example.umc10th.domain.review.converter.ReviewConverter;
 import com.example.umc10th.domain.review.dto.ReviewReqDTO;
+import com.example.umc10th.domain.review.dto.ReviewResDTO;
 import com.example.umc10th.domain.review.entity.Review;
 import com.example.umc10th.domain.review.entity.ReviewImage;
 import com.example.umc10th.domain.review.exception.ReviewException;
@@ -14,6 +16,8 @@ import com.example.umc10th.domain.review.exception.code.ReviewErrorCode;
 import com.example.umc10th.domain.review.repository.ReviewImageRepository;
 import com.example.umc10th.domain.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +35,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final StoreRepository storeRepository;
     private final ImageRepository imageRepository;
 
+    // 리뷰 작성
     @Override
     @Transactional
     public Review createReview(Long memberId, ReviewReqDTO.CreateReviewDTO request) {
@@ -71,5 +76,38 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         return savedReview;
+    }
+
+    // 내 리뷰 조회
+    @Override
+    public ReviewResDTO.ReviewCursorPageDTO getMyReviews(Long memberId, String sort, Long lastReviewId, Float lastRating, Integer size) {
+
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new ReviewException(ReviewErrorCode.MEMBER_NOT_FOUND));
+
+        // PageRequest 생성
+        PageRequest pageRequest = PageRequest.of(0, size);
+        Slice<Review> reviewSlice;
+
+        switch (sort.toUpperCase()) {
+            case "LATEST":
+                if (lastReviewId == null) {
+                    reviewSlice = reviewRepository.findMyReviewsByLatest(member, pageRequest);
+                } else {
+                    reviewSlice = reviewRepository.findMyReviewsByLatestWithCursor(member, lastReviewId, pageRequest);
+                }
+                break;
+
+            case "RATING":
+                if (lastReviewId == null) {
+                    reviewSlice = reviewRepository.findMyReviewsByRating(member, pageRequest);
+                } else {
+                    reviewSlice = reviewRepository.findMyReviewsByRatingWithCursor(member, lastRating, lastReviewId, pageRequest);
+                }
+                break;
+
+            default: throw new ReviewException(ReviewErrorCode.INVALID_SORT_TYPE);
+        }
+
+        return ReviewConverter.toReviewCursorPageDTO(reviewSlice);
     }
 }
