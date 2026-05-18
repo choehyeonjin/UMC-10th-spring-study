@@ -1,4 +1,4 @@
-package com.example.umc10th.global.handler;
+package com.example.umc10th.global.security.handler;
 
 import com.example.umc10th.global.apiPayload.code.GeneralErrorCode;
 import com.example.umc10th.global.security.util.HttpResponseUtil;

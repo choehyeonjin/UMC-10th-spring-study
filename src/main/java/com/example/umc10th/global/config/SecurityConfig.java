@@ -1,7 +1,7 @@
 package com.example.umc10th.global.config;
 
-import com.example.umc10th.global.handler.CustomAccessDenied;
-import com.example.umc10th.global.handler.CustomEntryPoint;
+import com.example.umc10th.global.security.handler.CustomAccessDenied;
+import com.example.umc10th.global.security.handler.CustomEntryPoint;
 import com.example.umc10th.global.security.filter.JwtAuthFilter;
 import com.example.umc10th.global.security.service.CustomUserDetailsService;
 import com.example.umc10th.global.security.util.JwtUtil;
