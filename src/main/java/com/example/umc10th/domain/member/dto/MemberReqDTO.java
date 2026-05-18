@@ -8,6 +8,8 @@ public class MemberReqDTO {
     // 회원가입
     public record JoinDTO(
             List<Long> termIds,
+            String email,
+            String password,
             String name,
             String gender,
             LocalDate birthdate,
