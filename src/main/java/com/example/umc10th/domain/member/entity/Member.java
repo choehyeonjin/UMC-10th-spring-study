@@ -41,11 +41,11 @@ public class Member extends BaseEntity {
     @Builder.Default
     private MemberStatus status = MemberStatus.ACTIVE;
 
-    @Column(name = "social_uid", nullable = false)
+    @Column(name = "social_uid")
     private String socialUid;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "social_type", nullable = false)
+    @Column(name = "social_type")
     private SocialType socialType;
 
     @Column(name = "name", nullable = false)
@@ -75,6 +75,9 @@ public class Member extends BaseEntity {
 
     @Column(name = "point", nullable = false)
     private Integer point;
+
+    @Column(name = "password")
+    private String password;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<MemberFood> memberFoodList = new ArrayList<>();
