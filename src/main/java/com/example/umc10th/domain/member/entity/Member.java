@@ -61,7 +61,7 @@ public class Member extends BaseEntity {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "nickname", nullable = false)
+    @Column(name = "nickname")
     private String nickname;
 
     @Column(name = "email")

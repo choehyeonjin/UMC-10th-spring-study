@@ -20,11 +20,13 @@ public class MemberController {
     @PostMapping("/auth/signup")
     public ApiResponse<MemberResDTO.JoinResultDTO> signUp(
             @RequestBody MemberReqDTO.JoinDTO request
-            ) {
+    ) {
+        MemberResDTO.JoinResultDTO resultDTO = memberService.signUp(request);
+
         BaseSuccessCode code = MemberSuccessCode.SIGNUP_CREATED;
         return ApiResponse.onSuccess(
                 code,
-                null); // memberService
+                resultDTO);
     }
 
     // 마이페이지 조회
