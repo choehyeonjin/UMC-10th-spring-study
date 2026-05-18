@@ -11,6 +11,7 @@ import com.example.umc10th.domain.member.entity.mapping.MemberTerm;
 import com.example.umc10th.domain.member.exception.MemberException;
 import com.example.umc10th.domain.member.exception.code.MemberErrorCode;
 import com.example.umc10th.domain.member.repository.*;
+import com.example.umc10th.global.security.entity.AuthMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -71,11 +72,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberResDTO.MyPageResultDTO getMyPage(Long memberId) {
+    public MemberResDTO.MyPageResultDTO getMyPage(
+            AuthMember member
+    ) {
 
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
-
-        return MemberConverter.toMyPageResultDTO(member);
+        return MemberConverter.toMyPageResultDTO(member.getMember());
     }
 }

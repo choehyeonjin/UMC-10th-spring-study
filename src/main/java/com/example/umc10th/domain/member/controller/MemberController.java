@@ -6,7 +6,9 @@ import com.example.umc10th.domain.member.exception.code.MemberSuccessCode;
 import com.example.umc10th.domain.member.service.MemberService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
+import com.example.umc10th.global.security.entity.AuthMember;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,10 +34,9 @@ public class MemberController {
     // 마이페이지 조회
     @GetMapping("/members/me")
     public ApiResponse<MemberResDTO.MyPageResultDTO> getMyPage(
+            @AuthenticationPrincipal AuthMember member
     ) {
-        Long memberId = 1L; // TODO: 인증 연동
-
-        MemberResDTO.MyPageResultDTO resultDTO = memberService.getMyPage(memberId);
+        MemberResDTO.MyPageResultDTO resultDTO = memberService.getMyPage(member);
 
         BaseSuccessCode code = MemberSuccessCode.MYPAGE_OK;
         return ApiResponse.onSuccess(
