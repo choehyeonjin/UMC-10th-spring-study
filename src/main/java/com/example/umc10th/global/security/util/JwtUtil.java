@@ -1,5 +1,6 @@
 package com.example.umc10th.global.security.util;
 
+import com.example.umc10th.domain.member.enums.SocialType;
 import com.example.umc10th.global.security.entity.AuthMember;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -36,14 +37,27 @@ public class JwtUtil {
         return createToken(member, accessExpiration);
     }
 
-    /** 토큰에서 이메일 가져오기
+    /** 토큰에서 소셜 로그인 타입 가져오기
      *
      * @param token 유저 정보를 추출할 토큰
-     * @return 유저 이메일을 토큰에서 추출합니다
+     * @return 유저 소셜 로그인 타입을 추출합니다.
      */
-    public String getEmail(String token) {
+    public SocialType getSocialType(String token) {
         try {
-            return getClaims(token).getPayload().getSubject(); // Parsing해서 Subject 가져오기
+            return SocialType.valueOf(getClaims(token).getPayload().get("social_type").toString().toUpperCase());
+        } catch (JwtException e) {
+            return null;
+        }
+    }
+
+    /** 토큰에서 UID 가져오기
+     *
+     * @param token 유저 정보를 추출할 토큰
+     * @return 유저의 UID(Subject)를 반환합니다.
+     */
+    public String getUid(String token) {
+        try {
+            return getClaims(token).getPayload().getSubject();
         } catch (JwtException e) {
             return null;
         }
@@ -73,9 +87,9 @@ public class JwtUtil {
                 .collect(Collectors.joining(","));
 
         return Jwts.builder()
-                .subject(member.getUsername()) // User 이메일을 Subject로
+                .subject(member.getUsername()) // User UID를 Subject로
                 .claim("role", authorities)
-                .claim("email", member.getUsername())
+                .claim("social_type", member.getMember().getSocialType())
                 .issuedAt(Date.from(now)) // 언제 발급한지
                 .expiration(Date.from(now.plus(expiration))) // 언제까지 유효한지
                 .signWith(secretKey) // sign할 Key
