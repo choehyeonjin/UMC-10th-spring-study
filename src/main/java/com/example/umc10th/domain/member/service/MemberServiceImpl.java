@@ -8,12 +8,13 @@ import com.example.umc10th.domain.member.entity.Member;
 import com.example.umc10th.domain.member.entity.Term;
 import com.example.umc10th.domain.member.entity.mapping.MemberFood;
 import com.example.umc10th.domain.member.entity.mapping.MemberTerm;
+import com.example.umc10th.domain.member.enums.SocialType;
 import com.example.umc10th.domain.member.exception.MemberException;
 import com.example.umc10th.domain.member.exception.code.MemberErrorCode;
 import com.example.umc10th.domain.member.repository.*;
 import com.example.umc10th.global.security.entity.AuthMember;
+import com.example.umc10th.global.security.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +32,7 @@ public class MemberServiceImpl implements MemberService {
     private final FoodRepository foodRepository;
     private final MemberTermRepository memberTermRepository;
     private final MemberFoodRepository memberFoodRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     @Override
     @Transactional
@@ -43,9 +44,14 @@ public class MemberServiceImpl implements MemberService {
             throw new MemberException(MemberErrorCode.TERM_NOT_AGREED);
         }
 
-        // 비밀번호 암호화 및 Member 저장
-        String encodedPassword = passwordEncoder.encode(request.password());
-        Member newMember = MemberConverter.toMember(request, encodedPassword);
+        // 이미 가입된 소셜 계정인지 검증
+        if (memberRepository.findBySocialTypeAndSocialUid(
+                SocialType.valueOf(request.socialType()), request.socialUid()).isPresent()) {
+            throw new MemberException(MemberErrorCode.MEMBER_ALREADY_EXISTS);
+        }
+
+        // 1. Member 엔티티 생성 및 저장 (비밀번호 암호화 로직 삭제)
+        Member newMember = MemberConverter.toMember(request);
         Member savedMember = memberRepository.save(newMember);
 
         // MemberTerm 매핑 및 저장
@@ -68,7 +74,10 @@ public class MemberServiceImpl implements MemberService {
             memberFoodRepository.saveAll(memberFoods);
         }
 
-        return MemberConverter.toJoinResultDTO(savedMember);
+        // JWT Access Token 발급
+        String accessToken = jwtUtil.createAccessToken(new AuthMember(savedMember));
+
+        return MemberConverter.toJoinResultDTO(savedMember, accessToken);
     }
 
     @Override

@@ -10,7 +10,8 @@ public class MemberResDTO {
     @Builder
     public record JoinResultDTO(
             Long memberId,
-            LocalDateTime createdAt
+            LocalDateTime createdAt,
+            String accessToken
     ) {}
 
     // 마이페이지 조회

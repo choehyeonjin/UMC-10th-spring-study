@@ -9,14 +9,16 @@ import com.example.umc10th.domain.member.entity.mapping.MemberFood;
 import com.example.umc10th.domain.member.entity.mapping.MemberTerm;
 import com.example.umc10th.domain.member.enums.Gender;
 import com.example.umc10th.domain.member.enums.MemberType;
+import com.example.umc10th.domain.member.enums.SocialType;
 
 public class MemberConverter {
 
     // 요청 DTO -> Member 엔티티
-    public static Member toMember(MemberReqDTO.JoinDTO request, String encodedPassword) {
+    public static Member toMember(MemberReqDTO.JoinDTO request) {
         return Member.builder()
+                .socialType(SocialType.valueOf(request.socialType().toUpperCase()))
+                .socialUid(request.socialUid())
                 .email(request.email())
-                .password(encodedPassword)
                 .name(request.name())
                 .gender(Gender.valueOf(request.gender()))
                 .birthdate(request.birthdate())
@@ -28,10 +30,11 @@ public class MemberConverter {
     }
 
     // Member 엔티티 -> 회원가입 응답 DTO
-    public static MemberResDTO.JoinResultDTO toJoinResultDTO(Member member) {
+    public static MemberResDTO.JoinResultDTO toJoinResultDTO(Member member, String accessToken) {
         return MemberResDTO.JoinResultDTO.builder()
                 .memberId(member.getId())
                 .createdAt(member.getCreatedAt())
+                .accessToken(accessToken)
                 .build();
     }
 

@@ -7,13 +7,14 @@ public class MemberReqDTO {
 
     // 회원가입
     public record JoinDTO(
-            List<Long> termIds,
+            String socialType,
+            String socialUid,
             String email,
-            String password,
             String name,
             String gender,
             LocalDate birthdate,
             String address,
+            List<Long> termIds,
             List<Long> preferredFoodIds
     ) {}
 }

@@ -17,9 +17,17 @@ public enum MemberErrorCode implements BaseErrorCode {
             "MEMBER400_1",
             "비활성화되거나 탈퇴한 회원입니다.")
     ,
+    NOT_SUPPORT_SOCIAL_PROVIDER(HttpStatus.BAD_REQUEST,
+            "MEMBER400_2",
+            "지원하지 않는 소셜 로그인 제공자입니다.")
+    ,
+    MEMBER_ALREADY_EXISTS(HttpStatus.BAD_REQUEST,
+            "MEMBER400_3",
+            "이미 가입된 회원입니다.")
+    ,
     // 약관 관련 에러
     TERM_NOT_AGREED(HttpStatus.BAD_REQUEST,
-            "MEMBER400_2",
+            "MEMBER400_4",
             "필수 약관에 모두 동의해야 합니다.")
     ,
     TERM_NOT_FOUND(HttpStatus.NOT_FOUND,
